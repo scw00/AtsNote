@@ -97,8 +97,8 @@ build_vol_hash_table(CacheHostRecord *cp)
   int i = 0; // index moving through the random numbers
   // 填充每个bucket
   for (int j = 0; j < VOL_HASH_TABLE_SIZE; j++) {
-    // 这里 pos 起始值不能为0 应为随机值不为0 且不能为 uint32 max 因为 没有值 > uint32_max
-    // 所以折中下去 1 / max， 所以取样空间在 width / 2 < x < (VOL_HASH_TABLE_SIZE - 1) * width
+    // 这里 pos 起始值不能为0 应为随机值不为0 且不能为 uint32 max 因为 所有值 < uint32_max
+    // 所以折中一下， 取样空间在 width / 2 < x < (VOL_HASH_TABLE_SIZE - 1) * width
     pos = width / 2 + j * width; // position to select closest to
     // 找到离采样点最近的随机数
     while (pos > rtable[i].rval && i < (int)rtable_size - 1) {
