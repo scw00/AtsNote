@@ -53,7 +53,7 @@ build_vol_hash_table(CacheHostRecord *cp)
     // 按比例划分 VOL_HASH_TABLE_SIZE 空间
     forvol[i] = (VOL_HASH_TABLE_SIZE * (p[i]->len >> STORE_BLOCK_SHIFT)) / total;
     used += forvol[i];
-    // 按8M 划分整个vol 的空间，既划分采样实例。vol 越大被采样的几率越大
+    // 按8M 划分整个vol 的空间，既划分采样本。vol 越大被采样的几率越大
     rtable_entries[i] = p[i]->len / VOL_HASH_ALLOC_SIZE;
     rtable_size += rtable_entries[i];
     gotvol[i] = 0;
@@ -100,8 +100,8 @@ build_vol_hash_table(CacheHostRecord *cp)
     // 这里 pos 起始值不能为0 应为随机值不为0 且不能为 uint32 max 因为 所有值 < uint32_max
     // 所以折中一下， 取样空间在 width / 2 < x < (VOL_HASH_TABLE_SIZE - 1) * width
     pos = width / 2 + j * width; // position to select closest to
-    // 找到离采样点最近的随机数
-    while (pos > rtable[i].rval && i < (int)rtable_size - 1) {
+    // 找到离采样点最近的随机数（样本）
+    while (pos > rtable[i].rval && i < (int)rtable_size - 1) {
       i++;
     }
     // 设置采样点对应的vol 索引
