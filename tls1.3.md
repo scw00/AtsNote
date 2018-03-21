@@ -164,13 +164,49 @@ Auth | {CertificateVerify*}
 
    如果server通过PSK认证，server 不会发送证书和证书确认消息。当客户端使用PSK来复用时，client必须提供key_share扩展项，这样可以被用于server在需要的时候拒绝并恢复到完整的握手。server 回应pre_shared_key扩展项来协商PSK key的使用或者回复key_share扩展项来进行(EC)DHE key的接力，这样来提供前置加密。
 
+## 2.3.  0-RTT Data
+   当clients 和servers 共享一个PSK(外部的或者前一次握手的)，TLS1.3允许客户端在第一次传输期间发送数据("early data")。客户端使用PSK来校验server和加密数据。
 
+   如图4，0-rtt数据被添加到1-rtt握手的clientHello中。是由PSK复用的剩余握手消息和1-rtt相同。
 
+   ```
+               Client                                               Server
 
+            ClientHello
+            + early_data
+            + key_share*
+            + psk_key_exchange_modes
+            + pre_shared_key
+            (Application Data*)     -------->
+                                                            ServerHello
+                                                       + pre_shared_key
+                                                           + key_share*
+                                                  {EncryptedExtensions}
+                                                          + early_data*
+                                                             {Finished}
+                                    <--------       [Application Data*]
+            (EndOfEarlyData)
+            {Finished}              -------->
 
+            [Application Data]      <------->        [Application Data]
 
+                  +  Indicates noteworthy extensions sent in the
+                     previously noted message.
 
+                  *  Indicates optional or situation-dependent
+                     messages/extensions that are not always sent.
 
+                  () Indicates messages protected using keys
+                     derived from client_early_traffic_secret.
 
+                  {} Indicates messages protected using keys
+                     derived from a [sender]_handshake_traffic_secret.
 
+                  [] Indicates messages protected using keys
+                     derived from [sender]_application_traffic_secret_N
+
+          Figure 4: Message flow for a zero round trip handshake
+   ```
+
+   警告：0-rtt数据的安全性要比其他TLS数据要地，特别是：
 
