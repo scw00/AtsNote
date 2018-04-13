@@ -19,4 +19,4 @@ SACK 对比 QUIC ack frame
  - QUIC 类似于sack，但是不再需要多个dack(QUIC 没有dack的概念)，当一个包在QUIC ack block的范围以外，有满足两个条件的任意一个就会认为这个包丢失：
    - 最大的确认包pkt num - 该包的pkt num > reordering_threshold，既超出容忍阈值。对应FR。
    - 该包丢失后持续一定时间(具体时间算法有两种，但不会超过2个rtt)，对应ER。相比于TCP的ER，超时明显靠谱的多。
- - 由于QUIC pkt number 单调递增，当重传时我们必须重新打包frame，生成一个新的包，这个包的pkt number 必然大于以前的包，并且这个包应该(之所以说应该是因为，spec并没有强制规定。)包含新的数据。这样可以使得QUIC不像QUIC Sack的HighRxt，卡在某一个关键数据上。
+ - 由于QUIC pkt number 单调递增，当重传时我们必须重新打包frame，生成一个新的包，这个包的pkt number 必然大于以前的包，并且这个包应该(之所以说应该是因为，spec并没有强制规定。)包含新的数据。这样可以使得QUIC不像TCP Sack的HighRxt，卡在某一个关键数据上。
