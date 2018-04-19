@@ -18,7 +18,7 @@ new reno  设置一个最大的recovery 点，一般为highest seq即为7，在7
  - 4、reno 建议tcp实现者在收到乱续包时立即发送ack 加速恢复效率。但是如果tcp没有遵从这个建议，那么对于new reno的性能而言会产生重大影响。因为当我们delay ack的时候会导致ack number的一次跃迁，这样会很可能大于4个MSS，而停止fast retransmit。
  - 5、同4 ack的丢失也会影响性能
 
-early retransmit尝试去解决尾包问题：
+# early retransmit尝试去解决尾包问题：
 ER给与了一个算法，通过计算网络中的包数来判断是否需要重传尾包，但ER算法任然有些问题
 TCP Early Retransmit的缺点
  - RFC文档指出最坏的情况：如果传输2片，这样ER_threashold == 0，所以只要这两片重排，那么就会重传，缺乏对重排的弹性。
