@@ -32,7 +32,7 @@ TCP Early Retransmit的缺点
  - RTO之后sack清零，如上所述RTO 默认为receiver 违约。
  - sack并不是每个设备都支持
 
-fack 利用sack解决ack丢失而无法进入fast retransmit问题
+# fack 利用sack解决ack丢失而无法进入fast retransmit问题
 fack记录sack 接收到的最大包fack，既fack - unacked > 3 mss || dack == 3 即可进入fast retransmit。避免因为dack丢失或者不足，而无法触发fast retransmit.并且纠正了网络上的包的数量的统计值(在fack之前，丢包只有重传包被正确响应时 才会减去对应的值)，避免窗口不足而出现的阻塞现象。
 
 # TCP RACK(draft-ietf-tcpm-rack-01 暂未被归纳入rfc)
